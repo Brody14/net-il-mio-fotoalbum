@@ -2,7 +2,80 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+<div class="container my-5 d-flex justify-content-end">
+    <div class="input-group">
+        <div class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></div>
+        <input type="text" class="form-control" id="search_box" placeholder="Cerca foto per titolo">
+    </div>
 </div>
+
+
+
+<div class="container mb-5 mt-3">
+
+    <div id="row-empty" class="row d-none">
+        <h3>Non ci sono foto da mostrare</h3>
+    </div>
+
+    <div id="row-full" class="row row-cols-2 gy-3">
+    </div>
+</div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+        loadPhotos();
+
+        document.getElementById("search_box").addEventListener('keyup', searchPhotos)
+
+        function searchPhotos() {
+            let searchString = document.getElementById("search_box").value;
+
+            loadPhotos(searchString);
+        }
+
+        function loadPhotos(searchParam) {
+            axios.get('/api/Photos/GetPhotoByName', {
+                params: {
+                    search: searchParam
+                }
+            }).then((res) => {
+
+                console.log(res)
+
+                let rowEmpty = document.getElementById("row-empty");
+                let rowFull = document.getElementById("row-full");
+                let category = document.getElementById("category");
+
+                if (res.data.length == 0) {
+                    rowEmpty.classList.remove("d-none");
+                } else {
+                    rowFull.classList.remove("d-none");
+
+                    rowFull.innerHTML = "";
+
+                    res.data.forEach(photo => {
+                        let categoryName = photo.categories.map(categories => categories.name);
+                        rowFull.innerHTML +=
+                            ` <div class="col">
+
+                                <div class="wrapper text-white d-flex justify-content-center">
+                                    <img class="image-fluid" src="${photo.imageSrc}" alt="${photo.title}">
+
+                                    <div class="description p-1 text-center">
+                                        <h6 class="title fw-bold mb-0">${photo.title}</h6>
+                                        <p class="mb-0 fs-6">${photo.description}</p>
+                                        <span class="fs-6">Categoria: ${categoryName} </span>
+                                    </div>
+                                </div>
+        
+                            </div>`
+
+                    })
+                }
+            })
+        }
+    </script>
+}
