@@ -100,6 +100,9 @@ namespace net_il_mio_fotoalbum.Controllers
                 }
             }
 
+            //imposto la visibilità
+            data.Photo.Visibility = data.IsPublic;
+            
 
             this.SetImageFileFromFormFile(data);
 
@@ -133,7 +136,7 @@ namespace net_il_mio_fotoalbum.Controllers
                         Selected = photoToEdit.Categories.Any(associatedCat => associatedCat.Id == category.Id) });
                 }
 
-                PhotoFormModel model = new PhotoFormModel { Photo = photoToEdit, Categories = categoriesSelectList };
+                PhotoFormModel model = new PhotoFormModel { Photo = photoToEdit, Categories = categoriesSelectList, IsPublic = photoToEdit.Visibility };
 
                 return View("Edit", model);
             }
@@ -170,7 +173,7 @@ namespace net_il_mio_fotoalbum.Controllers
 
                 photoToEdit.Title = data.Photo.Title;
                 photoToEdit.Description = data.Photo.Description;
-                photoToEdit.Visibility = data.Photo.Visibility;
+                photoToEdit.Visibility = data.IsPublic;
                 photoToEdit.ImageUrl = data.Photo.ImageUrl;
 
                 if (data.SelectedCategoriesId != null)

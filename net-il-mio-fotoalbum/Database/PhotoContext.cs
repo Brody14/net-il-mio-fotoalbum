@@ -16,5 +16,6 @@ namespace net_il_mio_fotoalbum.Database
         {
             optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=Photo;Integrated Security=True;TrustServerCertificate=True");
         }
+
     }
 }

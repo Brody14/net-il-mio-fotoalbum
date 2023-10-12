@@ -51,7 +51,9 @@
 
                 if (res.data.length == 0) {
                     rowEmpty.classList.remove("d-none");
+                    rowFull.classList.add("d-none");
                 } else {
+                    rowEmpty.classList.add("d-none");
                     rowFull.classList.remove("d-none");
 
                     rowFull.innerHTML = "";

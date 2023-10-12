@@ -22,19 +22,24 @@
             <span asp-validation-for="Photo.Description" class="text-danger"></span>
         </div>
 
-       @*  <div class="mb-3">
+        <div class="mb-3">
+            <label class="form-check-label mb-3">Seleziona la visibilità:</label>
 
-            <input class="form-check-input" type="checkbox" name="visibility" id="visibility" asp-for="Photo.Visibility">
-            <label class="form-check-label" for="visibility" asp-for="Photo.Visibility" value="true">
-                Pubblico
-            </label>
+            <div>
 
-            <input class="form-check-input" type="checkbox" name="visibility" id="visibility" asp-for="Photo.Visibility">
-            <label class="form-check-label" for="visibility" asp-for="Photo.Visibility" value="false">
-                Privato
-            </label>
+                <input class="form-check-input" type="radio" id="public" name="IsPublic" asp-for="IsPublic" value="true">
+                <label class="form-check-label me-2" for="public">
+                    Pubblico
+                </label>
 
-        </div> *@
+                <input class="form-check-input" type="radio" id="private" name="IsPublic" asp-for="IsPublic" value="false">
+                <label class="form-check-label" for="private">
+                    Privato
+                </label>
+
+            </div>
+
+        </div>
 
         <div class="mb-3">
             <label class="form-label" for="categories">Categorie</label>
@@ -47,12 +52,16 @@
         </div>
 
         <div class="mb-4">
-            <label asp-for="ImageFormFile">Foto</label>
+            <label class="mb-2">Foto</label>
             <div class="mb-2">
+                <label class="mb-2" asp-for="Photo.ImageUrl">Inserisci un URL</label>
                 <input type="text" class="form-control" asp-for="Photo.ImageUrl">
                 <span asp-validation-for="Photo.ImageUrl" class="text-danger"></span>
             </div>
             <div class="mb-2">
+                <div class="mb-2">
+                    <label asp-for="ImageFormFile">Oppure carica una foto</label>
+                </div>
                 <input type="file" asp-for="ImageFormFile" />
                 <span asp-validation-for="ImageFormFile" class="text-error"></span>
             </div>

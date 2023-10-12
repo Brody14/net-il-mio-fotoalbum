@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using Microsoft.EntityFrameworkCore;
 
 namespace net_il_mio_fotoalbum.Models
 {
@@ -23,7 +24,6 @@ namespace net_il_mio_fotoalbum.Models
 
         public string ImageSrc => ImageFile is null ? (ImageUrl is null ? "" : ImageUrl) : $"data:image/png;base64,{Convert.ToBase64String(ImageFile)}";
 
-        [DefaultValue(true)]
         public bool Visibility { get; set; }
 
         //relazione n a n con le categorie
@@ -40,5 +40,7 @@ namespace net_il_mio_fotoalbum.Models
             this.Description = description;
             this.Visibility = visibility;
         }
+
+       
     }
 }
