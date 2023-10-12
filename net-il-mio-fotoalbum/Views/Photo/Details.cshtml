@@ -1,0 +1,63 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+@model Photo
+
+<div class="container p-5">
+
+    <div class="row m-4 p-3 align-items-center justify-content-center">
+
+        <div class="col p-3 d-flex justify-content-center">
+            <img class="img-fluid" src="@Model.ImageSrc" alt="@Model.Title">
+        </div>
+
+        <div class="col">
+            <h5 class="card-title lh-lg text-capitalize">@Model.Title</h5>
+            <p> Descrizione: @Model.Description </p>
+    
+            <hr />
+
+            <h6>Categorie:</h6>
+            @if (Model.Categories != null && Model.Categories.Count > 0)
+            {
+                <ul class="list-unstyled">
+                    @foreach (Category cat in Model.Categories)
+                    {
+
+                        <li>- @cat.Name</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <span> La foto non è assegnata a nessuna categoria</span>
+            }
+
+            <hr />
+          
+            <div class="d-flex p-2 align-items-center">
+                <a class="p-2 text-reset" href="@Url.Action("Edit", "Photo", new { id = Model.Id })">
+                    <i class="fa-solid fa-pencil"></i>
+                </a>
+                <form asp-controller="Photo" asp-action="Delete" asp-route-id="@Model.Id" method="post">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </form>
+            </div>
+           
+
+        </div>
+    </div>
+
+</div>
+
+<div class="container my-5 text-center">
+    <a class="text-reset" href ="@Url.Action("Index", "Photo")">
+        <i class="fa-solid fa-left-long">
+            <p> Torna Indietro </p>
+        </i>
+    </a>
+</div>

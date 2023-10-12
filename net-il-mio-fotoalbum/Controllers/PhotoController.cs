@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using net_il_mio_fotoalbum.Database;
 using net_il_mio_fotoalbum.Models;
 
@@ -21,6 +22,22 @@ namespace net_il_mio_fotoalbum.Controllers
             List<Photo> photos = _myDatabase.Photos.ToList<Photo>();
 
             return View("Index", photos);
+        }
+
+        [Authorize(Roles = "ADMIN")]
+        public IActionResult Details(int id)
+        {
+            Photo? photoDetail = _myDatabase.Photos.Where(photo => photo.Id == id).Include(photo => photo.Categories).FirstOrDefault();
+
+            if (photoDetail == null)
+            {
+                return NotFound("La foto che hai cercato non è stata trovata...");
+            }
+            else
+            {
+                return View("Details", photoDetail);
+            }
+
         }
 
         [Authorize(Roles = "ADMIN")]
