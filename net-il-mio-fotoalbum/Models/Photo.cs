@@ -18,10 +18,10 @@ namespace net_il_mio_fotoalbum.Models
 
 
         [MaxLength(500, ErrorMessage = "Il link non può essere lungo più di 500 caratteri")]
-
+        public string? ImageUrl { get; set; }
         public byte[]? ImageFile { get; set; }
 
-        public string ImageSrc => ImageFile is null ? "" : $"data:image/png;base64,{Convert.ToBase64String(ImageFile)}";
+        public string ImageSrc => ImageFile is null ? (ImageUrl is null ? "" : ImageUrl) : $"data:image/png;base64,{Convert.ToBase64String(ImageFile)}";
 
         [DefaultValue(true)]
         public bool Visibility { get; set; }

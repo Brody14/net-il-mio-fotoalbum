@@ -25,12 +25,12 @@
        @*  <div class="mb-3">
 
             <input class="form-check-input" type="checkbox" name="visibility" id="visibility" asp-for="Photo.Visibility">
-            <label class="form-check-label" for="visibility" asp-for="Photo.Visibility">
+            <label class="form-check-label" for="visibility" asp-for="Photo.Visibility" value="true">
                 Pubblico
             </label>
 
             <input class="form-check-input" type="checkbox" name="visibility" id="visibility" asp-for="Photo.Visibility">
-            <label class="form-check-label" for="visibility" asp-for="Photo.Visibility">
+            <label class="form-check-label" for="visibility" asp-for="Photo.Visibility" value="false">
                 Privato
             </label>
 
@@ -48,6 +48,10 @@
 
         <div class="mb-4">
             <label asp-for="ImageFormFile">Foto</label>
+            <div class="mb-2">
+                <input type="text" class="form-control" asp-for="Photo.ImageUrl">
+                <span asp-validation-for="Photo.ImageUrl" class="text-danger"></span>
+            </div>
             <div class="mb-2">
                 <input type="file" asp-for="ImageFormFile" />
                 <span asp-validation-for="ImageFormFile" class="text-error"></span>
