@@ -4,6 +4,14 @@
 
 @model List<Photo>
 
+<ul class="nav justify-content-end">
+    <li class="nav-item">
+        <a class="nav-link active text-reset" aria-current="page" href="@Url.Action("Index", "Photo")">Foto</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-reset" href="@Url.Action("Index", "Category")">Categorie</a>
+    </li>
+</ul>
 
     @if (Model.Count() == 0)
     {
