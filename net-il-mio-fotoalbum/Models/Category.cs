@@ -10,7 +10,7 @@ namespace net_il_mio_fotoalbum.Models
         [MaxLength(50, ErrorMessage = "Il nome della categoria può avere un massimo di 50 caratteri")]
         public string Name { get; set; }
 
-        public List<Photo> Photos { get; set; }
+        public List<Photo>? Photos { get; set; }
 
         public Category()
         {

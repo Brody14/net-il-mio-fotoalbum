@@ -1,0 +1,25 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+@model Category
+
+<div class="container container_category p-5 my-5">
+
+    <h2 class="mb-4">Aggiungi una categoria</h2>
+
+    <form asp-controller="Category" asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+        <div class="mb-3">
+            <label for="name" class="form-label">Nome</label>
+            <input type="text" class="form-control" id="title" placeholder="Inserisci il nome della categoria" asp-for="Name">
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="d-flex align-items-center gap-3">
+            <button type="submit" class="btn">Aggiungi</button>
+            <a href="@Url.Action("Index", "Category")" class="btn">Indetro</a>
+        </div>
+    </form>
+
+</div>
