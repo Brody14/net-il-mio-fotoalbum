@@ -89,6 +89,28 @@ namespace net_il_mio_fotoalbum.Controllers
                 return NotFound("La categoria non è stata trovata...");
             }
         }
+
+        [Authorize(Roles = "ADMIN")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
+        {
+            Category? categoryToDelete = _myDatabase.Categories.Where(category => category.Id == id).FirstOrDefault();
+
+            if (categoryToDelete != null)
+            {
+                _myDatabase.Categories.Remove(categoryToDelete);
+
+                _myDatabase.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return NotFound("La categoria non è stata trovata...");
+            }
+
+        }
     }
     
 }
