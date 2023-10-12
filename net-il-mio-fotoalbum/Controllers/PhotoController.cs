@@ -108,6 +108,104 @@ namespace net_il_mio_fotoalbum.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [Authorize(Roles = "ADMIN")]
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            Photo? photoToEdit = _myDatabase.Photos.Where(photo => photo.Id == id).Include(photo => photo.Categories).FirstOrDefault();
+
+            if (photoToEdit == null)
+            {
+                return NotFound("La foto non è stata trovata...");
+            }
+            else
+            {
+                List<SelectListItem> categoriesSelectList = new List<SelectListItem>();
+                List<Category> categories = _myDatabase.Categories.ToList();
+
+
+                foreach (Category category in categories)
+                {
+                    categoriesSelectList.Add(new SelectListItem { 
+                        Text = category.Name, 
+                        Value = category.Id.ToString(), 
+                        Selected = photoToEdit.Categories.Any(associatedCat => associatedCat.Id == category.Id) });
+                }
+
+                PhotoFormModel model = new PhotoFormModel { Photo = photoToEdit, Categories = categoriesSelectList };
+
+                return View("Edit", model);
+            }
+        }
+
+        [Authorize(Roles = "ADMIN")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, PhotoFormModel data)
+        {
+            if (!ModelState.IsValid)
+            {
+
+                List<SelectListItem> categoriesSelectList = new List<SelectListItem>();
+                List<Category> categories = _myDatabase.Categories.ToList();
+
+
+                foreach (Category category in categories)
+                {
+                    categoriesSelectList.Add(new SelectListItem { Text = category.Name, Value = category.Id.ToString() });
+                }
+
+                data.Categories = categoriesSelectList;
+
+                return View("Edit", data);
+            }
+
+            Photo? photoToEdit = _myDatabase.Photos.Where(photo => photo.Id == id).Include(photo => photo.Categories).FirstOrDefault();
+
+            if (photoToEdit != null)
+            {
+                //svuoto la lista esistente di ingredienti
+                photoToEdit.Categories.Clear();
+
+                photoToEdit.Title = data.Photo.Title;
+                photoToEdit.Description = data.Photo.Description;
+                photoToEdit.Visibility = data.Photo.Visibility;
+                photoToEdit.ImageUrl = data.Photo.ImageUrl;
+
+                if (data.SelectedCategoriesId != null)
+                {
+                    foreach (string categorySelected in data.SelectedCategoriesId)
+                    {
+                        //converto le stringhe che arrivano dal form in interi
+                        int intCategorySelectedId = int.Parse(categorySelected);
+                        Category? categories = _myDatabase.Categories.Where(category => category.Id == intCategorySelectedId).FirstOrDefault();
+
+                        if (categories != null)
+                        {
+                            photoToEdit.Categories.Add(categories);
+                        }
+                    }
+                }
+
+                if (data.ImageFormFile != null)
+                {
+                    MemoryStream stream = new MemoryStream();
+                    data.ImageFormFile.CopyTo(stream);
+                    photoToEdit.ImageFile = stream.ToArray();
+                }
+
+                _myDatabase.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return NotFound("La foto non è stata trovata...");
+            }
+        }
+
+        //FUNZIONE PER IL SALVATAGGIO DELLE IMMAGINI CARICATE
         private void SetImageFileFromFormFile(PhotoFormModel formData)
         {
             if (formData.ImageFormFile == null)
@@ -120,5 +218,6 @@ namespace net_il_mio_fotoalbum.Controllers
             formData.Photo.ImageFile = stream.ToArray();
 
         }
+
     }
 }

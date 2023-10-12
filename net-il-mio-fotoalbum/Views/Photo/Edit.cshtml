@@ -1,0 +1,77 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+
+@model PhotoFormModel
+
+<div class="container p-5">
+
+    <h2 class="mb-4">Modifica</h2>
+
+    <form asp-controller="Photo" asp-action="Edit" method="post" asp-route-id="@Model.Photo.Id"  enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Photo.Id" />
+
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="title" asp-for="Photo.Title">
+            <span asp-validation-for="Photo.Title" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Descrizione</label>
+            <textarea class="form-control" id="description" asp-for="Photo.Description"></textarea>
+            <span asp-validation-for="Photo.Description" class="text-danger"></span>
+        </div>
+
+        @*  <div class="mb-3">
+
+            <input class="form-check-input" type="checkbox" name="visibility" id="visibility" asp-for="Photo.Visibility">
+            <label class="form-check-label" for="visibility" asp-for="Photo.Visibility" value="true">
+            Pubblico
+            </label>
+
+            <input class="form-check-input" type="checkbox" name="visibility" id="visibility" asp-for="Photo.Visibility">
+            <label class="form-check-label" for="visibility" asp-for="Photo.Visibility" value="false">
+            Privato
+            </label>
+
+        </div> *@
+
+        <div class="mb-3">
+            <label class="form-label" for="categories">Categorie</label>
+            <select asp-for="SelectedCategoriesId"
+                    multiple="multiple"
+                    size="5"
+                    class="form-control mb-2 mr-sm-2 ml-sm-3 leftList"
+                    asp-items="@Model.Categories">
+            </select>
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label">Foto</label>
+            <div class="my-3">      
+                <img class="border" src="@Model.Photo.ImageSrc" height="100">  
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label mb-2" asp-for="Photo.ImageUrl"> Inserisci un nuovo URL</label>
+                <input type="text" class="form-control" asp-for="Photo.ImageUrl">
+                <span asp-validation-for="Photo.ImageUrl" class="text-danger"></span>
+            </div>
+            <div class="mb-2">
+                <label class="form-label mb-2" asp-for="ImageFormFile" >Carica una nuova foto</label>
+                <div>
+                    <input type="file" asp-for="ImageFormFile" />
+                    <span asp-validation-for="ImageFormFile" class="text-error"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-3">
+            <button type="submit" class="btn">Modifica</button>
+            <a href="@Url.Action("Index", "Photo")" class="btn">Indetro</a>
+        </div>
+    </form>
+
+</div>
