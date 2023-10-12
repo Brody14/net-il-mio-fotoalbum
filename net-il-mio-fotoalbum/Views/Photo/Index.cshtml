@@ -4,14 +4,6 @@
 
 @model List<Photo>
 
-    @if (User.IsInRole("ADMIN"))
-    {
-        <div class="container p-3 d-flex justify-content-end">
-            <a class="text-reset" href="@Url.Action("Create", "Photo")">
-                <i class="fa-solid fa-plus"></i>
-            </a>
-        </div>
-    }
 
     @if (Model.Count() == 0)
     {
@@ -21,13 +13,56 @@
     }
 
 
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
+    <div class="container my-4">
+        <div class="row justify-content-between align-items-center">
+            <div class="col-10">
 
-                <h1 class="mb-5">Le tue foto</h1>
+                <h1 class="mb-3">Le tue foto</h1>
 
             </div>
+            <div class="col-2">
+                <a class="text-reset" href="@Url.Action("Create", "Photo")">
+                    <i class="fs-4 fa-solid fa-plus"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container my-5">
+        <div class="row row-cols-lg-4 row-cols-md-2 gy-3">
+
+            @foreach (Photo photo in Model)
+            {
+                <div class="col">
+                    <div class="card h-100">
+                        <img class="mx-auto border-bottom" width="304" height="203" src="@photo.ImageSrc" alt="@photo.Title">
+                        <div class="card-body">
+                            <h5 class="card-title">@photo.Title</h5>
+                            <p class="card-text">@photo.Description</p>
+                        </div>
+                        <div class="d-flex justify-content-end p-2 align-items-center">
+                            <a class="p-2 text-reset" href="@Url.Action("Details", "Photo", new { id = photo.Id })">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </a>
+
+                            <a class="p-2 text-reset" href="@Url.Action("Edit", "Photo", new { id = photo.Id })">
+                                <i class="fa-solid fa-pencil"></i>
+                            </a>
+
+                            <form asp-controller="Photo" asp-action="Delete" asp-route-id="@photo.Id" method="post">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </form>
+                           
+
+                        </div>
+                    </div>
+                </div>
+            }
+
+
         </div>
     </div>
 
