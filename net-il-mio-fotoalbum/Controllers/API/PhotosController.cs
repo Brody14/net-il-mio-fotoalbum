@@ -19,25 +19,17 @@ namespace net_il_mio_fotoalbum.Controllers.API
         }
 
         [HttpGet]
-        public IActionResult GetPhotos()
-        {
-            List<Photo> photos = _myDatabase.Photos.Include(photo => photo.Categories).ToList();
-
-            return Ok(photos);
-        }
-
-        [HttpGet]
         public IActionResult GetPhotoByName(string? search)
         {
             List<Photo> searchedPhoto;
 
             if (search == null)
             {
-                searchedPhoto = _myDatabase.Photos.Include(photo => photo.Categories).ToList(); ;
+                searchedPhoto = _myDatabase.Photos.Where(photo => photo.Visibility).Include(photo => photo.Categories).ToList(); ;
             }
             else
             {
-                searchedPhoto = _myDatabase.Photos.Where(photo => photo.Title.ToLower().Contains(search.ToLower())).Include(photo => photo.Categories).ToList();
+                searchedPhoto = _myDatabase.Photos.Where(photo => photo.Title.ToLower().Contains(search.ToLower()) && photo.Visibility).Include(photo => photo.Categories).ToList();
             }
             
 

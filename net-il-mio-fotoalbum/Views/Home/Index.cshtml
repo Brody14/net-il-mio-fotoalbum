@@ -45,8 +45,12 @@
 </div>
 
 
-
 <div class="container mb-5 mt-3">
+
+    <div class="d-flex align-items-center" id="loading">
+        <strong>Loading...</strong>
+        <div class="spinner-border ms-auto" role="status" aria-hidden="true"></div>
+    </div>
 
     <div id="row-empty" class="row d-none mb-4">
         <h3>Non ci sono foto da mostrare</h3>
@@ -81,6 +85,7 @@
 
                 console.log(res)
 
+                let loadingEl = document.getElementById("loading");
                 let rowEmpty = document.getElementById("row-empty");
                 let rowFull = document.getElementById("row-full");
                 let category = document.getElementById("category");
@@ -88,9 +93,12 @@
                 if (res.data.length == 0) {
                     rowEmpty.classList.remove("d-none");
                     rowFull.classList.add("d-none");
+                    loadingEl.classList.add("d-none");
+
                 } else {
                     rowEmpty.classList.add("d-none");
                     rowFull.classList.remove("d-none");
+                    loadingEl.classList.add("d-none");
 
                     rowFull.innerHTML = "";
 
@@ -103,7 +111,7 @@
                                     <img class="image-fluid" src="${photo.imageSrc}" alt="${photo.title}">
 
                                     <div class="description p-1 text-center">
-                                        <h6 class="title fw-bold mb-0">${photo.title}</h6>
+                                        <h6 class="title fw-bold mb-0 text-capitalize">${photo.title}</h6>
                                         <p class="mb-0 fs-6">${photo.description}</p>
                                         <span class="fs-6">Categoria: ${categoryName} </span>
                                     </div>
