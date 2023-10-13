@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using net_il_mio_fotoalbum.Database;
@@ -17,11 +18,24 @@ namespace net_il_mio_fotoalbum.Controllers
             _myDatabase = db;
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        public IActionResult Index(string? search)
         {
-            List<Photo> photos = _myDatabase.Photos.ToList<Photo>();
+            PhotoFilterModel searchedPhoto = new PhotoFilterModel();
 
-            return View("Index", photos);
+            if (search == null)
+            {
+                List<Photo> photos = _myDatabase.Photos.Include(photo => photo.Categories).ToList();
+                searchedPhoto.Photos = photos;
+            }
+            else
+            {
+                List<Photo> photos = _myDatabase.Photos.Where(photo => photo.Title.ToLower().Contains(search.ToLower())).Include(photo => photo.Categories).ToList();
+                searchedPhoto.Photos = photos;
+                searchedPhoto.Filter = search;
+            }
+
+            return View("Index", searchedPhoto);
         }
 
         [Authorize(Roles = "ADMIN")]
