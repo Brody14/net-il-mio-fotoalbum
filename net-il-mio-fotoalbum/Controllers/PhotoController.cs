@@ -9,7 +9,7 @@ using net_il_mio_fotoalbum.Models;
 
 namespace net_il_mio_fotoalbum.Controllers
 {
-    [Authorize(Roles = "USER,ADMIN")]
+    [Authorize(Roles = "ADMIN")]
     public class PhotoController : Controller
     {
         private PhotoContext _myDatabase;
@@ -20,7 +20,7 @@ namespace net_il_mio_fotoalbum.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(string? sortOrder, string? search)
+        public IActionResult Index(string? sortOrder, string? search,int? categoryId)
         {
             ViewBag.TitleSortParm = string.IsNullOrEmpty(sortOrder) ? "Title" : "";
             ViewBag.TitleAscSortParm = sortOrder == "Title" ? "title_desc" : "Title";
@@ -57,7 +57,20 @@ namespace net_il_mio_fotoalbum.Controllers
                 photos = photos.Where(p => p.Title.Contains(search));
             }
 
+            //filtro per categoria
+
+            if (categoryId.HasValue)
+            {
+                photos = photos.Where(p => p.Categories.Any(c => c.Id == categoryId.Value));
+
+            }
+
+            var categories = _myDatabase.Categories.ToList();
+            ViewBag.Categories = new SelectList(categories, "Id", "Name");
+          
+
             return View(photos.ToList());
+
             //PhotoFilterModel searchedPhoto = new PhotoFilterModel();
 
             //if (search == null)
