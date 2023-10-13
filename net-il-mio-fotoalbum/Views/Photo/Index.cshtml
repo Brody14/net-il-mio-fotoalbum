@@ -4,12 +4,15 @@
 
 @model List<Photo>
 
-<ul class="nav justify-content-end">
+<ul class="nav justify-content-end p-4">
     <li class="nav-item">
-        <a class="nav-link active text-reset" aria-current="page" href="@Url.Action("Index", "Photo")">Foto</a>
+        <a class="nav-link active text-reset" href="@Url.Action("Index", "Photo")">Foto</a>
     </li>
     <li class="nav-item">
         <a class="nav-link text-reset" href="@Url.Action("Index", "Category")">Categorie</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-reset" href="@Url.Action("Index", "Message")">Messaggi</a>
     </li>
 </ul>
 
@@ -50,7 +53,6 @@
                         <div class="card-body">
                             <h5 class="card-title">@photo.Title</h5>
                             <p class="card-text">@photo.Description</p>
-                            <p>@photo.Visibility</p>
                         </div>
                         <div class="d-flex justify-content-end p-2 align-items-center">
                             <a class="p-2 text-reset" href="@Url.Action("Details", "Photo", new { id = photo.Id })">

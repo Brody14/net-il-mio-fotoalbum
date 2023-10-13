@@ -30,3 +30,10 @@ img{
     opacity: 1;
     transition: opacity 2s;
 }
+
+/*ADMIN*/
+
+.active{
+    text-decoration: underline;
+    color: dimgrey;
+}

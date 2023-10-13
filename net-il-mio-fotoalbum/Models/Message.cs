@@ -14,7 +14,7 @@ namespace net_il_mio_fotoalbum.Models
         public string Text {  get; set; }
 
         [Required(ErrorMessage = "L'email è obbligatorio")]
-        [EmailAddress(ErrorMessage = "Il titolo può avere un massimo di 200 caratteri")]
+        [EmailAddress(ErrorMessage = "L'email non è valida")]
         public string Email { get; set; }
 
         public Message()
