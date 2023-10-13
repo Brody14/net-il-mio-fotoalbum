@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using net_il_mio_fotoalbum.Database;
 using net_il_mio_fotoalbum.Models;
@@ -19,23 +20,56 @@ namespace net_il_mio_fotoalbum.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(string? search)
+        public IActionResult Index(string? sortOrder, string? search)
         {
-            PhotoFilterModel searchedPhoto = new PhotoFilterModel();
+            ViewBag.TitleSortParm = string.IsNullOrEmpty(sortOrder) ? "Title" : "";
+            ViewBag.TitleAscSortParm = sortOrder == "Title" ? "title_desc" : "Title";
+            ViewBag.VisibilitySortParm = sortOrder == "Visibility" ? "Visibility_desc" : "Visibility";
 
-            if (search == null)
+            var photos = from p in _myDatabase.Photos
+                                 .Include(p => p.Categories)
+                                 select p;
+
+            //filtro per ordinamento
+            switch (sortOrder)
             {
-                List<Photo> photos = _myDatabase.Photos.Include(photo => photo.Categories).ToList();
-                searchedPhoto.Photos = photos;
-            }
-            else
-            {
-                List<Photo> photos = _myDatabase.Photos.Where(photo => photo.Title.ToLower().Contains(search.ToLower())).Include(photo => photo.Categories).ToList();
-                searchedPhoto.Photos = photos;
-                searchedPhoto.Filter = search;
+                case "Title":
+                    photos = photos.OrderBy(p => p.Title);
+                    break;
+                case "title_desc":
+                    photos = photos.OrderByDescending(p => p.Title);
+                    break;
+                case "Visibility":
+                    photos = photos.OrderBy(p => p.Visibility);
+                    break;
+                case "Visibility_desc":
+                    photos = photos.OrderByDescending(p => p.Visibility);
+                    break;
             }
 
-            return View("Index", searchedPhoto);
+            //filtro per titolo
+
+            if (!String.IsNullOrEmpty(search))
+            {
+                photos = photos.Where(p => p.Title.Contains(search));
+            }
+
+            return View(photos.ToList());
+            //PhotoFilterModel searchedPhoto = new PhotoFilterModel();
+
+            //if (search == null)
+            //{
+            //    List<Photo> photos = _myDatabase.Photos.Include(photo => photo.Categories).ToList();
+            //    searchedPhoto.Photos = photos;
+            //}
+            //else
+            //{
+            //    List<Photo> photos = _myDatabase.Photos.Where(photo => photo.Title.ToLower().Contains(search.ToLower())).Include(photo => photo.Categories).ToList();
+            //    searchedPhoto.Photos = photos;
+            //    searchedPhoto.Filter = search;
+            //}
+
+            //return View("Index", searchedPhoto);
         }
 
         [Authorize(Roles = "ADMIN")]
