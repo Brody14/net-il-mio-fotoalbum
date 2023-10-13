@@ -45,6 +45,9 @@ namespace net_il_mio_fotoalbum.Controllers
                 case "Visibility_desc":
                     photos = photos.OrderByDescending(p => p.Visibility);
                     break;
+                default:
+                    photos = photos.OrderBy(p => p.Title);
+                    break;
             }
 
             //filtro per titolo
